@@ -5,15 +5,18 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  router.get("/login", (req, res) => {
+  // send login form
+  router.post("/login", (req, res) => {
 
   });
 
+  // see register page
   router.get("/register", (req, res) => {
-
+    res.render("register");
   });
 
-  router.get("/register", (req, res) => {
+  // send register form
+  router.post("/register", (req, res) => {
 
   });
 

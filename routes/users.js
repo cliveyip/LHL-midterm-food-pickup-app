@@ -5,6 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
+  // see all users
   router.get("/", (req, res) => {
     knex
       .select("*")
@@ -14,6 +15,7 @@ module.exports = (knex) => {
     });
   });
 
+  // see specified user
   router.get("/:id", (req, res) => {
 
   });
