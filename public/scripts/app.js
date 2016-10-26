@@ -1,4 +1,4 @@
-$(() => {
+$(() => { // on page load
   $.ajax({
     method: "GET",
     url: "/api/users"
