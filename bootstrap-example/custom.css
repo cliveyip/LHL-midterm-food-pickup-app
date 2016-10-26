@@ -1,0 +1,21 @@
+body{
+  background-color: #e4e4e4;
+}
+
+#menu, #categories, #cart {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.food-item {
+  background-color: green;
+}
+
+.header-company {
+  float:left;
+}
+
+
+/*.outer {
+  border-style: solid;
+}*/
