@@ -6,15 +6,22 @@ const router  = express.Router();
 module.exports = (knex) => {
 
   router.get("/", (req, res) => {
-    knex
-      .select("*")
-      .from("users")
-      .then((results) => {
-        res.json(results);
-    });
+
   });
 
   router.get("/:id", (req, res) => {
+
+  });
+
+  router.get("/:id/checkout", (req, res) => {
+
+  });
+
+  router.post("/:id/checkout", (req, res) => {
+
+  });
+
+  router.get("/:id/confirmation", (req, res) => {
 
   });
 
