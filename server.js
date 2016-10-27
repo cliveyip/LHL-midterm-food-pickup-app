@@ -43,6 +43,17 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+// stores the phone call messages
+app.get("/phone-call-messages/", (req, res) => {
+  var builder = require('xmlbuilder');
+  var xml = builder.create('Reponse')
+                    .ele('Say', {'voice': 'woman'}, 'Customer ordered 2 pizza and 1 coke.')
+                    .end({ pretty: true});
+  res.set('Content-Type', 'text/xml');
+  res.send(xml);
+});
+
+
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
 });
