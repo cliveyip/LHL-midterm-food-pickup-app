@@ -5,8 +5,13 @@
     <% include partials/_header %>
     <main class="container">
       <h1>Restaurants</h1>
-      <% for (content in data) { %>
-        <%= data[content] %>
+      <% for (restaurant in data) { %>
+        <a href="restaurants/<%= data[restaurant].id %>/menu">
+        <%= data[restaurant].id %>
+        <%= data[restaurant].name %>
+        <%= data[restaurant].address %>
+        <%= data[restaurant].phone_numb %>
+        </a>
       <% } %>
     </main>
     <% include partials/_footer %>

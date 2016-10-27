@@ -5,6 +5,16 @@
     <% include partials/_header %>
     <main class="container">
       <h1>Register</h1>
+      <form action="/register" method="POST">
+        <label for="email">Enter Your Email: </label>
+        <input id="email" type="email" name="email">
+        <label for="password">Enter Your Password: </label>
+        <input id="password" type="password" name="password">
+        <button type="submit">Register</button>
+      </form>
+      <form action="/login" method="GET">
+        <button type="submit">Sign In</button>
+      </form>
     </main>
     <% include partials/_footer %>
   </body>

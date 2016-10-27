@@ -10,8 +10,9 @@ module.exports = (knex) => {
       .select("*")
       .from("restaurants")
       .then((results) => {
-        console.log(results[0]);
-        let templateVars = { data: results[0] };
+        console.log(results);
+        let templateVars = { data: results };
+        console.log(results);
         //console.log(templateVars.data);
         res.render("restaurants", templateVars);
     });
@@ -27,6 +28,7 @@ module.exports = (knex) => {
       .from("dishes")
       .then((results) => {
         templateVars.data = results;
+
       });
     res.render("menu", templateVars);
   });
