@@ -10,9 +10,7 @@ module.exports = (knex) => {
       .select("*")
       .from("restaurants")
       .then((results) => {
-        console.log(results[0]);
-        let templateVars = { data: results[0] };
-        //console.log(templateVars.data);
+        let templateVars = { data: results };
         res.render("restaurants", templateVars);
     });
 
@@ -21,14 +19,32 @@ module.exports = (knex) => {
   // see menus for specified restaurant
   // render with templatVars(cart data)
   router.get("/:id/menus", (req, res) => {
-    let templateVars = {};
-    knex
-      .select("*")
-      .from("dishes") // 'menus' will be better name?
-      .then((results) => {
-        templateVars.data = results;
-      });
-    res.render("menus", templateVars);
+    let templateVars = {
+      dishes:"",
+      restaurants:"",
+      carts: ""
+    };
+
+    let td = templateVars;
+
+       knex.select("*")
+       .from("restaurants").then((restaurants) => {
+         return td.restaurants = restaurants;
+        }).then((rest_db) => {
+          knex.select('*').from('dishes')
+           .then((dishes_db)=>{
+              return td.dishes = dishes_db;
+            }).then((carts)=>{
+              knex.select('*').from('carts')
+              .then((carts_db)=>{
+                td.carts = carts_db;
+                console.log(td);
+                res.render("menus", templateVars);
+              })
+            })
+      })
+      .catch((err)=>{
+          console.log(`Failed to get data ${err}`)});
   });
 
   // when +,- clicked, update database cart and response with updated cart data

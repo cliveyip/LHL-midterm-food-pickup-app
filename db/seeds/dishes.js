@@ -3,9 +3,13 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       return Promise.all([
         knex('dishes').insert({
-          name:"Chicken Wings", price:"9.99",
-          category:"App"
-        })
+          name:"chips", price:"2.99",
+          category:"app"
+        }),
+         knex('dishes').insert({
+          name:"CheeseBurger", price:"12.99",
+          category:"main"
+        }),
 
       ]);
     });
