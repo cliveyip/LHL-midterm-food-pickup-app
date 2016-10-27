@@ -20,15 +20,15 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
-  router.get("/:id/menus", (req, res) => {
+  router.get("/:id/menu", (req, res) => {
     let templateVars = {};
     knex
       .select("*")
-      .from("dishes") // 'menus' will be better name?
+      .from("dishes")
       .then((results) => {
         templateVars.data = results;
       });
-    res.render("menus", templateVars);
+    res.render("menu", templateVars);
   });
 
   // when +,- clicked, update database cart and response with updated cart data
