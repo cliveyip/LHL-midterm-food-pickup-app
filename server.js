@@ -45,8 +45,8 @@ app.get("/", (req, res) => {
 
 // stores the phone call messages
 app.get("/phone-call-messages/", (req, res) => {
-  var builder = require('xmlbuilder');
-  var xml = builder.create('Reponse')
+  var xmlbuilder = require('xmlbuilder');
+  var xml = xmlbuilder.create('Reponse')
                     .ele('Say', {'voice': 'woman'}, 'Customer ordered 2 pizza and 1 coke.')
                     .end({ pretty: true});
   res.set('Content-Type', 'text/xml');
