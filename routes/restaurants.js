@@ -4,17 +4,18 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
-
   // see all restaurants
   router.get("/", (req, res) => {
-    let templateVars = {};
     knex
       .select("*")
       .from("restaurants")
       .then((results) => {
-        templateVars.data = results;
+        console.log(results[0]);
+        let templateVars = { data: results[0] };
+        //console.log(templateVars.data);
+        res.render("restaurants", templateVars);
     });
-    res.render("restaurants", templateVars);
+
   });
 
   // see menus for specified restaurant

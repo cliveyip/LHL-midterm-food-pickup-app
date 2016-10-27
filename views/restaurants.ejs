@@ -2,7 +2,9 @@
 <html lang="en">
   <% include partials/_head %>
   <body>
-    <% include partials/_header %>
     <h1>Restaurants</h1>
+    <% for (content in data) { %>
+      <%= data[content] %>
+    <% } %>
   </body>
 </html>
