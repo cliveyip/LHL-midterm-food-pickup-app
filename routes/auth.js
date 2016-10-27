@@ -20,5 +20,10 @@ module.exports = (knex) => {
 
   });
 
+  // logout
+  router.post("/logout", (req, res) => {
+    
+  });
+
   return router;
 }
