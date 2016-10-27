@@ -8,12 +8,12 @@ module.exports = (knex) => {
   // see all restaurants
   router.get("/", (req, res) => {
     let templateVars = {};
-    // knex
-    //   .select("*")
-    //   .from("restaurants")
-    //   .then((results) => {
-    //     templateVars.data = results;
-    // });
+    knex
+      .select("*")
+      .from("restaurants")
+      .then((results) => {
+        templateVars.data = results;
+    });
     res.render("restaurants", templateVars);
   });
 
@@ -21,12 +21,12 @@ module.exports = (knex) => {
   // render with templatVars(cart data)
   router.get("/:id/menus", (req, res) => {
     let templateVars = {};
-    // knex
-    //   .select("*")
-    //   .from("menus") // 'menus' will be better name?
-    //   .then((results) => {
-    //     templateVars.data = results;
-    //   });
+    knex
+      .select("*")
+      .from("dishes") // 'menus' will be better name?
+      .then((results) => {
+        templateVars.data = results;
+      });
     res.render("menus", templateVars);
   });
 
@@ -58,6 +58,15 @@ module.exports = (knex) => {
   // communicate with the restaurant using twillo api (send updated cart as an order)
   // render with templateVars (w/e info we got from api)
   router.post("/:id/checkout", (req, res) => {
+
+
+
+
+
+
+
+
+
     res.render("confirmation");
   });
 

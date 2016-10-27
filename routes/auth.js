@@ -7,7 +7,8 @@ module.exports = (knex) => {
 
   // send login form
   router.post("/login", (req, res) => {
-
+    console.log(req.body.email);
+    console.log(req.body.password);
   });
 
   // see register page
@@ -22,7 +23,7 @@ module.exports = (knex) => {
 
   // logout
   router.post("/logout", (req, res) => {
-    
+
   });
 
   return router;
