@@ -18,6 +18,7 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
+<<<<<<< HEAD
   router.get("/:id/menu", (req, res) => {
     let templateVars = {};
     knex
@@ -27,6 +28,35 @@ module.exports = (knex) => {
         let templateVars = { data: results };
         res.render("menu", templateVars);
       });
+=======
+  router.get("/:id/menus", (req, res) => {
+    let templateVars = {
+      dishes:"",
+      restaurants:"",
+      carts: ""
+    };
+
+    let td = templateVars;
+
+       knex.select("*")
+       .from("restaurants").then((restaurants) => {
+         return td.restaurants = restaurants;
+        }).then((rest_db) => {
+          knex.select('*').from('dishes')
+           .then((dishes_db)=>{
+              return td.dishes = dishes_db;
+            }).then((carts)=>{
+              knex.select('*').from('carts')
+              .then((carts_db)=>{
+                td.carts = carts_db;
+                console.log(td);
+                res.render("menus", templateVars);
+              })
+            })
+      })
+      .catch((err)=>{
+          console.log(`Failed to get data ${err}`)});
+>>>>>>> 17fd30d5d23eed0a155ef36034d16de4e7cca51f
   });
 
   // when +,- clicked, update database cart and response with updated cart data
