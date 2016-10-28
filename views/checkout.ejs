@@ -5,6 +5,31 @@
     <% include partials/_header %>
     <main class="container">
       <h1>Checkout</h1>
+
+      <section> <% var total = 0.00
+      var tax = 0.00 %>
+
+      <% data.forEach(function(dish) { %>
+    <p> Dish: <%=dish.name %> Price: <%=dish.price %>
+      X <%= dish.quantity %> =
+      <% var price = dish.price
+        var quantity = dish.quantity %>
+        <%= price * quantity %>
+        <%total += price * quantity %>
+    </p> <% }); %>
+    <p>Total: <%= total %><p>
+    <p>Taxes (13%): <%= tax = Math.round((total * 0.13)*100)/100 %></p>
+    <p> Total + Tax : <%= Math.round((total + tax)*100)/100 %> </p>
+
+      <button ><a href= '/users/2/restaurants/:id/confirmation'> Order Now</a></button>
+
+
+      </section>
+
+
+
+
+
     </main>
     <% include partials/_footer %>
   </body>

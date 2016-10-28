@@ -116,13 +116,34 @@ module.exports = (knex) => {
 
     console.log("Test");
 
+    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
+    .select('dishes.name','dishes.price','carts.quantity').
+    then((results) => {
+      let templateVars = {data:results};
+      console.log(results);
+      res.render('checkout', templateVars);
+    }).catch((e)=>{
+      console.log(`failed to get data ${e}`)});
+
+
+
+
+    /*knex
+      .select("*")
+      .from("carts")
+      .then((results) => {
+        let templateVars = { data: results };
+        console.log(results);
+        res.render("checkout", templateVars);
+    }); */
+
     // knex
     //   .select("*")
     //   .from("cart")
     //   .then((results) => {
     //     templateVars.data = results;
     // });
-    res.render("checkout", templateVars);
+
   });
 
   // update payment method in database cart
