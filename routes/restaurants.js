@@ -18,7 +18,7 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
-  router.get("/:id/menus", (req, res) => {
+  router.get("/:id/menu", (req, res) => {
     let templateVars = {
       dishes:"",
       restaurants:"",
@@ -62,13 +62,16 @@ module.exports = (knex) => {
   // render checkout with templatVars(cart data)
   router.get("/:id/checkout", (req, res) => {
     let templateVars = {};
+
+    console.log("Test");
+
     // knex
     //   .select("*")
     //   .from("cart")
     //   .then((results) => {
     //     templateVars.data = results;
     // });
-    res.render("checkout");
+    res.render("checkout", templateVars);
   });
 
   // update payment method in database cart
