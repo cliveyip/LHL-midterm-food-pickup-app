@@ -3,7 +3,7 @@
   <% include partials/_head %>
   <body>
     <% include partials/_header %>
-    <main class="container">
+    <div class="container">
       <h1>Restaurants</h1>
       <% for (restaurant in data) { %>
         <a href="restaurants/<%= data[restaurant].id %>/menu">
@@ -13,7 +13,7 @@
         <%= data[restaurant].phone_numb %>
         </a>
       <% } %>
-    </main>
+    </div>
     <% include partials/_footer %>
   </body>
 </html>

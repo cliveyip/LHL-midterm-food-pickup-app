@@ -3,19 +3,17 @@
   <% include partials/_head %>
   <body>
     <% include partials/_header %>
-    <main class="container">
-      <h1>HOME</h1>
-      <form action="/login" method="POST">
-        <label for="email">Enter Your Email: </label>
-        <input id="email" type="email" name="email">
-        <label for="password">Enter Your Password: </label>
-        <input id="password" type="password" name="password">
-        <button type="submit">Sign In</button>
-      </form>
-      <form action="/register" method="GET">
-        <button type="submit">Register</button>
-      </form>
-    </main>
+    <div class="container">
+      <div class="jumbotron text-center">
+        <h1>HOME</h1>
+        <h1><span class="fa fa-lock"></span> Authentication</h1>
+
+        <p>Login or Register with:</p>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Log In</a>
+        <a href="/register" class="btn btn-default"><span class="fa fa-user"></span> Sign Up</a>
+      </div>
+    </div>
     <% include partials/_footer %>
   </body>
 </html>
