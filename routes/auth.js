@@ -23,13 +23,15 @@ module.exports = (knex) => {
         req.flash('loginMsg', "you don't have an account. Please sign up");
         return res.redirect('login');
       }
-      else if (!bycrypt.compareSync(password, result[0].password)){
+      else if (!bcrypt.compareSync(password, result[0].password)){
         req.flash('loginMsg', "Incorrect password. Please try again");
         return res.redirect('login');
       }
       else{
-        // set the session.id
-        // redirect to /users/:id/restaurants
+        req.session.id = result[0].id;
+        console.log(req.session.id);
+        res.redirect(`/users/${result[0].id}/restaurants/1/menu`);
+        //redirect to /users/:id/restaurants
       }
     })
   });
@@ -53,7 +55,16 @@ module.exports = (knex) => {
       if(results.length == 0) {
         const hashedPassword = bcrypt.hashSync(password);
         // add new user info -> alex
-        knex('users').insert({});
+        knex('users').insert({
+          id:5,
+          name: name, username:'something',
+          password: hashedPassword, email: email,
+          is_owner: false, phone_numb: phone
+        })
+        .then(() => {
+
+          res.redirect(`/users/5/restaurants/`);
+        });
 
 
 
@@ -62,7 +73,7 @@ module.exports = (knex) => {
       }
       else {
         req.flash('registerMsg', 'You already have an account. Please Sign In');
-        res.redirect('register')
+        res.redirect('register');
       }
     })
   });

@@ -6,7 +6,7 @@
     <div class="container">
       <h1>Restaurants</h1>
       <% for (restaurant in data) { %>
-        <a href="restaurants/<%= data[restaurant].id %>/menu">
+        <a href="<%= data[restaurant].id %>/menu">
         <%= data[restaurant].id %>
         <%= data[restaurant].name %>
         <%= data[restaurant].address %>
