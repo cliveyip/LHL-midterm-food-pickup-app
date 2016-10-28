@@ -18,7 +18,7 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
-  router.get("/:id/menus", (req, res) => {
+  router.get("/:id/menu", (req, res) => {
     let templateVars = {
       dishes:"",
       restaurants:"",
