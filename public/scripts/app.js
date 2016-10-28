@@ -1,13 +1,13 @@
-$(() => { // on page load
-  // $.ajax({
-  //   method: "GET",
-  //   url: "/users"
-  // }).done((users) => {
-  //   for(user of users) {
-  //     $("<div>").text(user.name).appendTo($("body"));
-  //   }
-  // });
-});
+// $(() => { // on page load
+//   // $.ajax({
+//   //   method: "GET",
+//   //   url: "/users"
+//   // }).done((users) => {
+//   //   for(user of users) {
+//   //     $("<div>").text(user.name).appendTo($("body"));
+//   //   }
+//   // });
+// });
 
 $(document).ready(function () {
   $('.input-group').on('click', 'button', function (event) {
@@ -24,16 +24,16 @@ $(document).ready(function () {
       if (+$quantity.val() == 10) $quantity.val(10);
       else $quantity.val(+$quantity.val()+1);
     }
-    if (+$quantity.val() > 0) {
-      var jsonData = {food_name: foodName, food_price: foodPrice, quantity: +$quantity.val()}
-      $.ajax({
-        url: '/users/:id/restaurants/:id/cart/update',
-        method: 'POST',
-        data: jsonData,
-        success: function () {
-          console.log('success');
-        }
-      });
-    }
+
+    var jsonData = {food_name: foodName, food_price: foodPrice, quantity: +$quantity.val()}
+    $.ajax({
+      url: '/users/:id/restaurants/:id/cart/update',
+      method: 'POST',
+      data: jsonData,
+      success: function (data) {
+        console.log(data);
+      }
+    });
+
   });
 });

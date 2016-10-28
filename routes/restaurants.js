@@ -41,23 +41,46 @@ module.exports = (knex) => {
     const foodName = req.body.food_name;
     const foodPrice = req.body.food_price;
     const quantity = req.body.quantity;
-    console.log(foodName);
     knex
     .select('id')
     .from('dishes')
     .where('name', foodName)
     .then((results) => {
-      let id = results[0].id;
+      let dish_id = results[0].id;
       knex
       .select('*')
       .from('carts')
-      .where('dish_id', id)
+      .where('dish_id', dish_id)
       .then((results) => {
-        if (!result) {
-          
+        if (results.length == 0) {
+          knex('carts').insert({
+            dish_id: dish_id,
+            quantity: "1"
+          })
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              res.json(result);
+            });
+          });
         }
         else {
-
+          knex('carts')
+          .where('dish_id', dish_id)
+          .update({quantity: quantity})
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              console.log(result);
+              res.json(result);
+            });
+          });
         }
       })
     });
