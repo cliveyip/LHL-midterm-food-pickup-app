@@ -18,8 +18,10 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
-<<<<<<< HEAD
-  router.get("/:id/menus", (req, res) => {
+
+
+  router.get("/:id/menu", (req, res) => {
+
     let templateVars = {
       dishes:"",
       restaurants:"",
@@ -46,7 +48,10 @@ module.exports = (knex) => {
       })
       .catch((err)=>{
           console.log(`Failed to get data ${err}`)});
+<<<<<<< HEAD
 
+=======
+>>>>>>> dba23567d6aa1a25e72917a6fd5e7d21d6006900
   });
 
   // when +,- clicked, update database cart and response with updated cart data
