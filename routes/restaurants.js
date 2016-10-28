@@ -48,7 +48,6 @@ module.exports = (knex) => {
       })
       .catch((err)=>{
           console.log(`Failed to get data ${err}`)});
-
   });
 
   // when +,- clicked, update database cart and response with updated cart data
