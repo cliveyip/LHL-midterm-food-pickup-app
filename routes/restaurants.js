@@ -18,7 +18,11 @@ module.exports = (knex) => {
 
   // see menus for specified restaurant
   // render with templatVars(cart data)
+
+
+
   router.get("/:id/menu", (req, res) => {
+
     let templateVars = {
       dishes:"",
       restaurants:"",
@@ -45,6 +49,7 @@ module.exports = (knex) => {
       })
       .catch((err)=>{
           console.log(`Failed to get data ${err}`)});
+
   });
 
   // when +,- clicked, update database cart and response with updated cart data
@@ -56,6 +61,52 @@ module.exports = (knex) => {
     // db.carts.update(req.body.menuItemId, newCartData =>
     //   res.json(newCartData)
     // )
+    const foodName = req.body.food_name;
+    const foodPrice = req.body.food_price;
+    const quantity = req.body.quantity;
+    knex
+    .select('id')
+    .from('dishes')
+    .where('name', foodName)
+    .then((results) => {
+      let dish_id = results[0].id;
+      knex
+      .select('*')
+      .from('carts')
+      .where('dish_id', dish_id)
+      .then((results) => {
+        if (results.length == 0) {
+          knex('carts').insert({
+            dish_id: dish_id,
+            quantity: "1"
+          })
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              res.json(result);
+            });
+          });
+        }
+        else {
+          knex('carts')
+          .where('dish_id', dish_id)
+          .update({quantity: quantity})
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              console.log(result);
+              res.json(result);
+            });
+          });
+        }
+      })
+    });
   });
 
   // see checkout page with updated cart
