@@ -12,21 +12,16 @@
       <% data.forEach(function(dish) { %>
     <p> Dish: <%=dish.name %> Price: <%=dish.price %>
       X <%= dish.quantity %> =
-
-
       <% var price = dish.price
         var quantity = dish.quantity %>
         <%= price * quantity %>
         <%total += price * quantity %>
-
-
-
-
     </p> <% }); %>
     <p>Total: <%= total %><p>
     <p>Taxes (13%): <%= tax = Math.round((total * 0.13)*100)/100 %></p>
     <p> Total + Tax : <%= Math.round((total + tax)*100)/100 %> </p>
 
+      <button ><a href= '/users/2/restaurants/:id/confirmation'> Order Now</a></button>
 
 
       </section>
