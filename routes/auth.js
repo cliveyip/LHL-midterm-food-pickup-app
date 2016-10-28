@@ -6,7 +6,7 @@ const router  = express.Router();
 module.exports = (knex) => {
 
   router.get("/login", (req, res) => {
-    res.render("index");
+    res.render("login", { message: req.flash('loginMsg')});
   });
 
   // send login form
@@ -17,11 +17,14 @@ module.exports = (knex) => {
 
   // see register page
   router.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", { message: req.flash('registerMsg')});
   });
 
   // send register form
   router.post("/register", (req, res) => {
+    const newUser = {
+      //
+    };
 
   });
 
