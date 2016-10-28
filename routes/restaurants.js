@@ -43,7 +43,7 @@ module.exports = (knex) => {
               .then((carts_db)=>{
                 td.carts = carts_db;
                 console.log(td);
-                res.render("menus", templateVars);
+                res.render("menu", templateVars);
               })
             })
       })
