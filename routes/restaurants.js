@@ -10,10 +10,7 @@ module.exports = (knex) => {
       .select("*")
       .from("restaurants")
       .then((results) => {
-        console.log(results);
         let templateVars = { data: results };
-        console.log(results);
-        //console.log(templateVars.data);
         res.render("restaurants", templateVars);
     });
 
@@ -27,10 +24,9 @@ module.exports = (knex) => {
       .select("*")
       .from("dishes")
       .then((results) => {
-        templateVars.data = results;
-
+        let templateVars = { data: results };
+        res.render("menu", templateVars);
       });
-    res.render("menu", templateVars);
   });
 
   // when +,- clicked, update database cart and response with updated cart data
@@ -42,6 +38,29 @@ module.exports = (knex) => {
     // db.carts.update(req.body.menuItemId, newCartData =>
     //   res.json(newCartData)
     // )
+    const foodName = req.body.food_name;
+    const foodPrice = req.body.food_price;
+    const quantity = req.body.quantity;
+    console.log(foodName);
+    knex
+    .select('id')
+    .from('dishes')
+    .where('name', foodName)
+    .then((results) => {
+      let id = results[0].id;
+      knex
+      .select('*')
+      .from('carts')
+      .where('dish_id', id)
+      .then((results) => {
+        if (!result) {
+          
+        }
+        else {
+
+        }
+      })
+    });
   });
 
   // see checkout page with updated cart

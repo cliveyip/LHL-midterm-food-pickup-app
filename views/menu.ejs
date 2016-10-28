@@ -4,7 +4,48 @@
   <body>
     <% include partials/_header %>
     <main class="container">
-      <h1>Menu</h1>
+      <row>
+        <h1>Menu</h1>
+      </row>
+
+
+      <div class="row" >
+        <div class="col-md-7 outer">
+          <div class="col-md-10 col-md-offset-1" id="menu">
+            <% for (dish in data) { %>
+            <row class="food-item">
+              <div class = "col-md-6 dish-name"><%= data[dish].name %></div>
+              <div class = "col-md-2 dish-price">$<%= data[dish].price %></div>
+              <div class = "col-md-4">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]">
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                  </span>
+                  <input type="text" name="quant[2]" class="form-control input-number" value="0" min="1" max="100">
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+                          <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                  </span>
+                </div>
+              </div>
+            </row>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="col-md-4 outer" id="cart">
+          </p> Your order </p>
+
+          <row>
+            <button type="button" class="btn btn-success pull-right">Check out</button>
+          </row>
+        </div>
+      </div>
+    </div>
+
     </main>
     <% include partials/_footer %>
   </body>
