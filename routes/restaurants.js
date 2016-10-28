@@ -3,6 +3,12 @@
 const express = require('express');
 const router  = express.Router();
 
+var accountSid = 'AC4982007c746ac9894fa245eedb675219';
+var authToken = '5b33845fd992c0d3c8e5eba8ed5c0c53';
+//require the Twilio module and create a REST client
+var client = require('twilio')(accountSid, authToken);
+
+
 module.exports = (knex) => {
   // see all restaurants
   router.get("/", (req, res) => {
@@ -43,7 +49,7 @@ module.exports = (knex) => {
               .then((carts_db)=>{
                 td.carts = carts_db;
                 console.log(td);
-                res.render("menu", templateVars);
+                res.render("menus", templateVars);
               })
             })
       })
@@ -147,23 +153,46 @@ module.exports = (knex) => {
   });
 
   // update payment method in database cart
-  // communicate with the restaurant using twillo api (send updated cart as an order)
+  // communicate with the restaurant using twilio api (send updated cart as an order)
   // render with templateVars (w/e info we got from api)
   router.post("/:id/checkout", (req, res) => {
 
+    let db = {};
+    let order = "";
+    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
+    .select('dishes.name','dishes.price','carts.quantity','carts.user_id').
+    then((results) => {
+       db = {data:results};
+      console.log(results);
+
+      results.forEach((item)=>{
+       order += `${item.quantity.toString()}-${item.name}\n`
 
 
+      });
+      order = `User ${results[0].user_id} Order is :\n${order}`;
 
 
-
-
-
+   client.messages.create({
+        to: "+16478867803",
+        from: "+16477243888",
+        body: order,
+    }, function(err, message) {
+        console.log(message.sid);
+    });
 
     res.render("confirmation");
+
+
+
+
+
+    }).catch((e)=>{
+      console.log(`failed to get data ${e}`)});
   });
 
   // see confirmation page
-  // maybe not needed, need to see twillo api
+  // maybe not needed, need to see twilio api
   router.get("/:id/confirmation", (req, res) => {
     res.render("confirmation");
   });

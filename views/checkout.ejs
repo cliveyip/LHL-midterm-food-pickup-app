@@ -6,7 +6,7 @@
     <main class="container">
       <h1>Checkout</h1>
 
-      <section> <% var total = 0.00
+      <section id="confirm_order"> <% var total = 0.00
       var tax = 0.00 %>
 
       <% data.forEach(function(dish) { %>
@@ -21,10 +21,13 @@
     <p>Taxes (13%): <%= tax = Math.round((total * 0.13)*100)/100 %></p>
     <p> Total + Tax : <%= Math.round((total + tax)*100)/100 %> </p>
 
-      <button ><a href= '/users/2/restaurants/:id/confirmation'> Order Now</a></button>
+     </section>
+
+    <form action= "" method ="POST">
+      <button name="foo" value="order_now" > Order Now </button>
+    </form>
 
 
-      </section>
 
 
 
