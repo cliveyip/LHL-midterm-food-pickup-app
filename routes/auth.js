@@ -27,7 +27,7 @@ module.exports = (knex) => {
       }
       else{
         req.session.user = result[0];
-        res.redirect('/users/restaurants/');
+        return res.redirect('/users/restaurants/');
       }
     })
   });
@@ -36,7 +36,7 @@ module.exports = (knex) => {
   router.get("/register", (req, res) => {
     res.render("register", { message: req.flash('registerMsg')});
   });
-
+  
   // send register form
   router.post("/register", (req, res) => {
     const email = req.body.email;

@@ -57,12 +57,12 @@ app.use(flash());
 
 const authCheck = (req, res, next) => {
   // if (req.session.user) {
-    next();
+  //   next();
   // }
   // else {
   //   res.redirect('/login');
   // }
-
+  next();
 }
 
 // function isOwner() {
