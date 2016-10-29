@@ -2,6 +2,8 @@
 
 const express = require('express');
 const router  = express.Router();
+const $ = require("jquery");
+
 
 var accountSid = 'AC4982007c746ac9894fa245eedb675219';
 var authToken = '5b33845fd992c0d3c8e5eba8ed5c0c53';
@@ -49,7 +51,7 @@ module.exports = (knex) => {
               .then((carts_db)=>{
                 td.carts = carts_db;
                 console.log(td);
-                res.render("menus", templateVars);
+                res.render("menu", templateVars);
               })
             })
       })
@@ -120,8 +122,6 @@ module.exports = (knex) => {
   router.get("/:id/checkout", (req, res) => {
     let templateVars = {};
 
-    console.log("Test");
-
     knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
     .select('dishes.name','dishes.price','carts.quantity').
     then((results) => {
@@ -131,24 +131,6 @@ module.exports = (knex) => {
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
 
-
-
-
-    /*knex
-      .select("*")
-      .from("carts")
-      .then((results) => {
-        let templateVars = { data: results };
-        console.log(results);
-        res.render("checkout", templateVars);
-    }); */
-
-    // knex
-    //   .select("*")
-    //   .from("cart")
-    //   .then((results) => {
-    //     templateVars.data = results;
-    // });
 
   });
 
@@ -167,35 +149,72 @@ module.exports = (knex) => {
 
       results.forEach((item)=>{
        order += `${item.quantity.toString()}-${item.name}\n`
-
-
       });
       order = `User ${results[0].user_id} Order is :\n${order}`;
-
-
+/*
    client.messages.create({
         to: "+16478867803",
         from: "+16477243888",
         body: order,
     }, function(err, message) {
         console.log(message.sid);
-    });
+    }); */
 
-    res.render("confirmation");
-
-
-
-
-
+    res.redirect("/users/:id/restaurants/:id/confirmation");
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
   });
 
+
+
+
+
   // see confirmation page
   // maybe not needed, need to see twilio api
   router.get("/:id/confirmation", (req, res) => {
+    console.log("in confirmation get request");
     res.render("confirmation");
   });
+
+
+
+  router.get("/:id/orders", (req, res) => {
+    console.log("Inside orders");
+    let templateVars = {};
+
+    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
+    .select('dishes.name','dishes.price','carts.quantity','user_id').
+    then((results) => {
+      let templateVars = {data:results};
+      console.log(results);
+      res.render('owner.ejs', templateVars);
+    }).catch((e)=>{
+      console.log(`failed to get data ${e}`)});
+  });
+
+
+
+router.post("/:id/orders", (req, res) => {
+      let templateVars = {};
+
+    console.log("Notify clicked");
+    const mintues = $('#mintuescont').val();
+    console.log(mintues);
+
+    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
+    .select('dishes.name','dishes.price','carts.quantity','user_id').
+    then((results) => {
+      let templateVars = {data:results};
+      console.log(results);
+      res.render('owner.ejs', templateVars);
+    }).catch((e)=>{
+      console.log(`failed to get data ${e}`)});
+
+
+  });
+
+
+
 
   return router;
 }

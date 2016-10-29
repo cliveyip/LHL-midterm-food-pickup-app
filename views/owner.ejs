@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <% include partials/_head %>
+
   <body>
     <% include partials/_header %>
     <main class="container">
       <h1>Owner</h1>
       <p> ORDERS</p>
-      <section>
+      Find the orders below and notify customers the estimated time for food.
+
+      <section id = "order_list">
+          <form id= "order" name = "composeorder" action ="" method ="POST">
+          Order for User: <%= data[0].user_id %>
+            <input id = "minutescont" type = "text" placeholder="minutes" >
+            <input type = "submit" value ="Notify" >
+       </form>
       </section>
+
     </main>
     <% include partials/_footer %>
   </body>
