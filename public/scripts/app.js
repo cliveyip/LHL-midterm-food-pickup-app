@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     var jsonData = {food_name: foodName, food_price: foodPrice, quantity: +$quantity.val()}
     $.ajax({
-      url: '/users/:id/restaurants/:id/cart/update',
+      url: '/users/restaurants/:id/cart/update',
       method: 'POST',
       data: jsonData,
       success: function (data) {

@@ -5,6 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex) => {
   // see all restaurants
+
   router.get("/", (req, res) => {
     knex
       .select("*")
@@ -38,7 +39,7 @@ module.exports = (knex) => {
               knex.select('*').from('carts')
               .then((carts_db)=>{
                 td.carts = carts_db;
-                console.log(td);
+                //console.log(td);
                 res.render("menu", templateVars);
               })
             })
@@ -86,19 +87,36 @@ module.exports = (knex) => {
           });
         }
         else {
-          knex('carts')
-          .where('dish_id', dish_id)
-          .update({quantity: quantity})
-          .then(() => {
-            knex
-            .select('*')
-            .from('dishes')
-            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
-            .then((result) => {
-              console.log(result);
-              res.json(result);
+          if (quantity === 0) {
+            knex('carts')
+            .where('dish_id', dish_id)
+            .del()
+            .then(() => {
+              knex
+              .select('*')
+              .from('dishes')
+              .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+              .then((result) => {
+                console.log(result);
+                res.json(result);
+              });
             });
-          });
+          }
+          else {
+            knex('carts')
+            .where('dish_id', dish_id)
+            .update({quantity: quantity})
+            .then(() => {
+              knex
+              .select('*')
+              .from('dishes')
+              .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+              .then((result) => {
+                console.log(result);
+                res.json(result);
+              });
+            });
+          }
         }
       })
     });

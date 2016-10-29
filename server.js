@@ -50,10 +50,28 @@ app.use(session({
 }));
 app.use(flash());
 
+// Routes
+
 // Mount all resource routes
+
+
+const authCheck = (req, res, next) => {
+  // if (req.session.user) {
+    next();
+  // }
+  // else {
+  //   res.redirect('/login');
+  // }
+
+}
+
+// function isOwner() {
+//   // and check that their role is 'owner'
+//
+// }
+
 app.use("/", authRoutes(knex));
-//app.use("/users", usersRoutes(knex));
-app.use("/users/:id/restaurants", restaurantsRoutes(knex));
+app.use("/users/restaurants", authCheck, restaurantsRoutes(knex));
 app.use("/owners", ownerRoutes(knex));
 
 // Home page

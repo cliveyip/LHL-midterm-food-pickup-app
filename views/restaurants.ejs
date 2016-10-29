@@ -4,15 +4,18 @@
   <body>
     <% include partials/_header %>
     <div class="container">
-      <h1>Restaurants</h1>
-      <% for (restaurant in data) { %>
-        <a href="<%= data[restaurant].id %>/menu">
-        <%= data[restaurant].id %>
-        <%= data[restaurant].name %>
-        <%= data[restaurant].address %>
-        <%= data[restaurant].phone_numb %>
-        </a>
-      <% } %>
+      <div class="jumbotron text-center">
+        <h1>Restaurants</h1>
+        <% for (restaurant in data) { %>
+          <a href="<%= data[restaurant].id %>/menu">
+          <%= data[restaurant].id %>
+          <%= data[restaurant].name %>
+          <%= data[restaurant].address %>
+          <%= data[restaurant].phone_numb %>
+          </a>
+        <% } %>
+        <a href="/logout" class="btn btn-danger"><span class="fa fa-sign-out"></span> Log Out</a>
+      </div>
     </div>
     <% include partials/_footer %>
   </body>

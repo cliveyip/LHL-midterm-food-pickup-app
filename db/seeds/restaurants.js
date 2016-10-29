@@ -1,13 +1,11 @@
-
 exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex('restaurants').del()
     .then(function () {
       return Promise.all([
-        // Inserts seed entries
-        knex('table_name').insert({id: 1, colName: 'rowValue1'}),
-        knex('table_name').insert({id: 2, colName: 'rowValue2'}),
-        knex('table_name').insert({id: 3, colName: 'rowValue3'})
+        knex('restaurants').insert({
+          id:1, owner_id:2, name: "Joe's BBQ",
+          phone_numb: "5559871234",
+          address:"22 Parklane"})
       ]);
     });
 };
