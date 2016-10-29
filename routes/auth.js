@@ -2,9 +2,17 @@
 
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
-const router  = express.Router();
+const router = express.Router();
 
 module.exports = (knex) => {
+
+  // Authorization Middleware
+  router.use((req, res, next) => {
+    if (req.session && req.session.user) {
+      console.log(req.session);
+    }
+    next();
+  });
 
   router.get("/login", (req, res) => {
     res.render("login", { message: req.flash('loginMsg')});
@@ -12,6 +20,7 @@ module.exports = (knex) => {
 
   // send login form
   router.post("/login", (req, res) => {
+    console.log('login');
     const email = req.body.email;
     const password = req.body.password;
 
@@ -28,10 +37,8 @@ module.exports = (knex) => {
         return res.redirect('login');
       }
       else{
-        req.session.id = result[0].id;
-        console.log(req.session.id);
+        req.session.user = result[0];
         res.redirect(`/users/${result[0].id}/restaurants/1/menu`);
-        //redirect to /users/:id/restaurants
       }
     })
   });
@@ -55,15 +62,17 @@ module.exports = (knex) => {
       if(results.length == 0) {
         const hashedPassword = bcrypt.hashSync(password);
         // add new user info -> alex
-        knex('users').insert({
-          id:5,
+        const newUser = {
+          id:6,
           name: name, username:'something',
           password: hashedPassword, email: email,
           is_owner: false, phone_numb: phone
-        })
+        };
+        knex('users')
+        .insert(newUser)
         .then(() => {
-
-          res.redirect(`/users/5/restaurants/`);
+          req.session.user = newUser;
+          res.redirect(`/users/6/restaurants/`);
         });
 
 
