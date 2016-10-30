@@ -179,7 +179,32 @@ module.exports = (knex) => {
   // maybe not needed, need to see twilio api
   router.get("/:id/confirmation", (req, res) => {
     console.log("in confirmation get request");
-    res.render("confirmation");
+        let db = {};
+    let order = "";
+    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
+    .select('dishes.name','dishes.price','carts.quantity','carts.user_id').
+    then((results) => {
+       db = {data:results};
+
+
+      results.forEach((item)=>{
+       order += `${item.quantity.toString()}-${item.name}\n`
+      });
+      order = `User ${results[0].user_id} Order is :\n${order}`;
+      console.log("API sends text");
+
+   client.messages.create({
+        to: "+16478867803",
+        from: "+16477243888",
+        body: order,
+    }, function(err, message) {
+        console.log(message.sid);
+    });
+
+      res.render("confirmation");
+    }).catch((e)=>{
+      console.log(`failed to get data ${e}`)});
+
   });
 
 
@@ -205,13 +230,24 @@ router.post("/:id/orders", (req, res) => {
 
     console.log("Notify clicked");
 
-    console.log(req.body.minutes);
+
+   const minutes = `Thank You ! \n Your order will be ready in ${req.body.minutes} minutes`;
 
     knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
     .select('dishes.name','dishes.price','carts.quantity','user_id').
     then((results) => {
       let templateVars = {data:results};
-      console.log(results);
+
+      console.log("Send time to Client");
+         client.messages.create({
+        to: "+16478867803",
+        from: "+16477243888",
+        body: minutes,
+    }, function(err, message) {
+      console.log(err);
+    });
+
+
       res.render('owner.ejs', templateVars);
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
