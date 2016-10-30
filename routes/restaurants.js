@@ -2,7 +2,6 @@
 
 const express = require('express');
 const router  = express.Router();
-const $ = require("jquery");
 
 
 var accountSid = 'AC4982007c746ac9894fa245eedb675219';
@@ -198,8 +197,8 @@ router.post("/:id/orders", (req, res) => {
       let templateVars = {};
 
     console.log("Notify clicked");
-    const mintues = $('#mintuescont').val();
-    console.log(mintues);
+
+    console.log(req.body.minutes);
 
     knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
     .select('dishes.name','dishes.price','carts.quantity','user_id').
