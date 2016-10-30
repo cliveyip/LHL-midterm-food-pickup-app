@@ -3,37 +3,37 @@
   <% include partials/_head %>
   <body>
     <% include partials/_header %>
-    <main class="container">
-      <h1>Checkout</h1>
-
-      <section id="confirm_order"> <% var total = 0.00
-      var tax = 0.00 %>
-
-      <% data.forEach(function(dish) { %>
-    <p> Dish: <%=dish.name %> Price: <%=dish.price %>
-      X <%= dish.quantity %> =
-      <% var price = dish.price
-        var quantity = dish.quantity %>
-        <%= price * quantity %>
-        <%total += price * quantity %>
-    </p> <% }); %>
-    <p>Total: <%= total %><p>
-    <p>Taxes (13%): <%= tax = Math.round((total * 0.13)*100)/100 %></p>
-    <p> Total + Tax : <%= Math.round((total + tax)*100)/100 %> </p>
-
-     </section>
-
-    <form action= "" method ="POST">
-      <button name="foo" value="order_now" > Order Now </button>
-    </form>
-
-    <button><a href = "/users/2/restaurants/1/menu"> Back </a></button>
+    <div class="container">
 
 
 
+      <div class="jumbotron">
+        <h1>Checkout</h1>
 
+        <section id="confirm_order">
+          <% var total = 0.00, tax = 0.00 %>
 
-    </main>
+          <% data.forEach(function(dish) { %>
+            <p> Dish: <%= dish.name %> Price: <%= dish.price %> X <%= dish.quantity %> =
+              <% var price = dish.price
+                var quantity = dish.quantity %>
+                <%= price * quantity %>
+                <%total += price * quantity %>
+            </p>
+          <% }); %>
+          <p> Total: <%= total %> </p>
+          <p> Taxes (13%): <%= tax = Math.round((total * 0.13)*100)/100 %></p>
+          <p> Total + Tax : <%= Math.round((total + tax)*100)/100 %> </p>
+
+        </section>
+
+        <form action= "" method ="POST">
+          <button type="button" class="btn btn-success" name="foo" value="order_now" > Order Now </button>
+        </form>
+
+        <button type="button" class="btn btn-default"><a href = "/users/2/restaurants/1/menu"> Back </a></button>
+      </div>
+    </div>
     <% include partials/_footer %>
   </body>
 </html>

@@ -2,51 +2,68 @@
 <html lang="en">
   <% include partials/_head %>
   <body>
-    <% include partials/_header %>
-    <main class="container">
-      <row>
-        <h1>Menu</h1>
-      </row>
-
-
-      <div class="row" >
-        <div class="col-md-7 outer">
-          <div class="col-md-10 col-md-offset-1" id="menu">
-            <% for (dish in dishes) { %>
-            <row class="food-item">
-              <div class = "col-md-6 dish-name"><%= dishes[dish].name %></div>
-              <div class = "col-md-2 dish-price">$<%= dishes[dish].price %></div>
-              <div class = "col-md-4">
-                <div class="input-group">
-                  <span class="input-group-btn">
-                      <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]">
-                        <span class="glyphicon glyphicon-minus"></span>
-                      </button>
-                  </span>
-                  <input type="text" name="quant[2]" class="form-control input-number" value="0" min="1" max="100">
-                  <span class="input-group-btn">
-                      <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
-                          <span class="glyphicon glyphicon-plus"></span>
-                      </button>
-                  </span>
-                </div>
-              </div>
-            </row>
-            <% } %>
-          </div>
-        </div>
-
-        <div class="col-md-4 outer" id="cart">
-          </p> Your order </p>
-
-          <row>
-            <button type="button" class="btn btn-success pull-right">Check out</button>
-          </row>
-        </div>
+    <nav class="navbar navbar-dark bg-inverse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/#">
+          <img src="/images/hangry-cat.png" width="60" height="60" class="d-inline-block align-top" alt="">
+          Hangry CAT
+        </a>
       </div>
+      <a href="/logout" class="btn btn-danger float-lg-right"><span class="fa fa-sign-out"></span> Log Out</a>
+    </nav>
+    <div class="container">
+
+        <div class="col-md-7" id="menu">
+          <h1 class="display-3">Pick your dish</h1>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>MENU</th>
+                <th>CATEGORY</th>
+                <th>PRICE</th>
+                <th class="col-md-8">QUANTITY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (dish in data) { %>
+                <tr class="food-item">
+                  <th scope="row" class="dish-name"><%=data[dish].name%></th>
+                  <td class="dish-category"><%=data[dish].category%></td>
+                  <td class="dish-price"><%=data[dish].price%></td>
+                  <td class="col-md-8">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]">
+                            <span class="glyphicon glyphicon-minus">-</span>
+                          </button>
+                      </span>
+                      <input type="text" name="quant[2]" class="form-control input-number" value="0" min="1" max="10">
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+                              <span class="glyphicon glyphicon-plus">+</span>
+                          </button>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-5" id="cart">
+          <h1><span class="fa fa-shopping-cart"></span> Cart</h1>
+          <div class="jumbotron">
+            <ul>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-success pull-right">Checkout</button>
+
+        </div>
+
     </div>
 
-    </main>
-    <% include partials/_footer %>
+  </div>
+    <% include partials/_scripts %>
   </body>
 </html>
