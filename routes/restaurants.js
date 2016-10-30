@@ -188,7 +188,7 @@ module.exports = (knex) => {
       console.log(results);
       res.render('owner.ejs', templateVars);
     }).catch((e)=>{
-      console.log(`failed to get data ${e}`)});
+      console.log(` failed to get data ${e}`)});
   });
 
 
