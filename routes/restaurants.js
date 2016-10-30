@@ -12,23 +12,15 @@ var client = require('twilio')(accountSid, authToken);
 
 module.exports = (knex) => {
   router.get("/", (req, res) => {
-    console.log(req.session.user);
     const name = req.session.user.name;
     knex
       .select("*")
       .from("restaurants")
       .then((results) => {
-        //let templateVars = { data: results };
-        let templateVars = { data: results, name: name };
-        res.render("restaurants", templateVars);
+        res.render("restaurants", { data: results, name: name });
     });
 
   });
-
-  // see menus for specified restaurant
-  // render with templatVars(cart data)
-
-
 
   router.get("/:id/menu", (req, res) => {
     // let templateVars = {
@@ -62,7 +54,7 @@ module.exports = (knex) => {
     .from('dishes')
     .orderBy('category', 'desc')
     .then((results) => {
-      res.render('menu', { data: results });
+      res.render('menu', { data: results, id: req.params.id });
     })
   });
 
@@ -120,7 +112,7 @@ module.exports = (knex) => {
       .catch((err)=>{
           console.log(`Failed to get data ${err}`)});
 
-  */});
+  });*/
 
   // when +,- clicked, update database cart and response with updated cart data
   // use append to add and remove from cart view (in app.js)

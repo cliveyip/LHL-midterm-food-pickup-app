@@ -5,13 +5,8 @@
     <% include partials/_header %>
 
     <div class="container">
-      <h1>Checkout</h1>
-    <div class="container">
-
-
-
+      <h1 class="display-3">Order Now!</h1>
       <div class="jumbotron">
-        <h1>Checkout</h1>
 
         <section id="confirm_order">
           <% var total = 0.00, tax = 0.00 %>
@@ -34,10 +29,9 @@
           <button type="button" class="btn btn-success" name="foo" value="order_now" > Order Now </button>
         </form></a>
 
-        <a href = "/users/2/restaurants/1/menu"><button type="button" class="btn btn-default"> Back </button></a>
+        <a href = "/users/2/restaurants/1/menu"><button type="button" class="btn btn-warning float-lg-right"> Back </button></a>
       </div>
->>>>>>> 696f50f1aa365a20672e3e06edfd2bd46e1e18aa
     </div>
-    <% include partials/_footer %>
+    <% include partials/_scripts %>
   </body>
 </html>
