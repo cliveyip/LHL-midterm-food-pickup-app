@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const $ = require("jquery");
+//const $ = require("jquery");
 
 
 var accountSid = 'AC4982007c746ac9894fa245eedb675219';
