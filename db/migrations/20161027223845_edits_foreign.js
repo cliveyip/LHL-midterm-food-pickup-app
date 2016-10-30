@@ -1,3 +1,4 @@
+
 exports.up = function(knex, Promise) {
     return knex.schema.table('dishes',  (table) => {
     table.dropColumn('restaurant_id');})
@@ -27,3 +28,4 @@ exports.down = function(knex, Promise) {
     .then(()=>{knex.schema.table('carts');});
 
 };
+

@@ -5,6 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex) => {
   router.get("/", (req, res) => {
+    console.log(req.session.user);
     const name = req.session.user.name;
     knex
       .select("*")

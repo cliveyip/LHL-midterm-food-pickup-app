@@ -49,44 +49,52 @@ module.exports = (knex) => {
 
   // see register page
   router.get("/register", (req, res) => {
+    if (req.session.user){
+      res.redirect("/");
+    }
     res.render("register", { message: req.flash('registerMsg')});
   });
 
   // send register form
   router.post("/register", (req, res) => {
-    if (req.session.user){
-      res.redirect("/");
-    }
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
     const phone = req.body.phone;
 
-    knex.select('*')
-    .from('users')
-    .where('email', email)
-    .then((results) => {
-      if(results.length == 0) {
-        const hashedPassword = bcrypt.hashSync(password);
-        const newUser = {
-          email: email,
-          password: hasshedPassword,
-          name: name,
-          phone_number: phone
-        };
-        knex('users')
-        .insert(newUser)
-        .then(() => {
-          req.session.user = newUser;
-          res.redirect('/users/restaurants');
-        });
-      }
-      else {
-        req.flash('registerMsg', 'You already have an account. Please Sign In');
-        res.redirect('register');
-      }
-    })
+    if (!email || !password || !name || !phone) {
+      req.flash('registerMsg', 'You need to fill in the blanks');
+      res.redirect('register');
+    }
+    else {
+      knex.select('*')
+      .from('users')
+      .where('email', email)
+      .then((results) => {
+        if(results.length == 0) {
+          const hashedPassword = bcrypt.hashSync(password);
+          const newUser = {
+            name: name,
+            email: email,
+            password: hashedPassword,
+            phone_numb: phone,
+            is_owner: false
+          };
+          knex('users')
+          .insert(newUser)
+          .then(() => {
+            req.session.user = newUser;
+            res.redirect('/users/restaurants');
+          });
+        }
+        else {
+          req.flash('registerMsg', 'You already have an account. Please Sign In');
+          res.redirect('register');
+        }
+      });
+    }
   });
+
 
   // logout
   router.get("/logout", (req, res) => {
