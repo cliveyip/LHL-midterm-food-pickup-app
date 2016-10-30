@@ -30,6 +30,13 @@ module.exports = (knex) => {
 
   router.get("/:id/menu", (req, res) => {
 
+
+    console.log("in menu");
+    knex.select("*").from("dishes").then(
+      (results)=>{
+        res.render('menu',{data:results});
+      })
+/*
     let templateVars = {
       dishes:"",
       restaurants:"",
@@ -57,7 +64,7 @@ module.exports = (knex) => {
       .catch((err)=>{
           console.log(`Failed to get data ${err}`)});
 
-  });
+  */});
 
   // when +,- clicked, update database cart and response with updated cart data
   // use append to add and remove from cart view (in app.js)
