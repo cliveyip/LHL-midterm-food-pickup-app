@@ -11,7 +11,12 @@ exports.up = function(knex, Promise) {
     table.string('phone_numb');
     table.boolean('is_owner');
   });
+<<<<<<< HEAD
 })
+=======
+
+    })
+>>>>>>> 696f50f1aa365a20672e3e06edfd2bd46e1e18aa
 
 
 };
