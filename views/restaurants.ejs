@@ -3,17 +3,35 @@
   <% include partials/_head %>
   <body>
     <% include partials/_header %>
-    <main class="container">
-      <h1>Restaurants</h1>
-      <% for (restaurant in data) { %>
-        <a href="restaurants/<%= data[restaurant].id %>/menu">
-        <%= data[restaurant].id %>
-        <%= data[restaurant].name %>
-        <%= data[restaurant].address %>
-        <%= data[restaurant].phone_numb %>
-        </a>
-      <% } %>
-    </main>
-    <% include partials/_footer %>
+    <div class="container">
+      <div class="col-md-8">
+        <h1 class="display-3">Welcome, <%= name %></h1>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th><span class="fa fa-info-circle"></span> NAME</th>
+                <th><span class="fa fa-map-marker"></span> ADDRESS</th>
+                <th><span class="fa fa-phone"></span> PHONE NUMBER</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (restaurant in data) { %>
+                <tr class="restaurant">
+                  <th scope="row"><%=data[restaurant].id%></th>
+                  <td><%=data[restaurant].name%></td>
+                  <td><%=data[restaurant].address%></td>
+                  <td><%=data[restaurant].phone_numb%></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+
+    </div>
+    <% include partials/_scripts %>
   </body>
 </html>

@@ -2,17 +2,21 @@
 
 require('dotenv').config();
 
-const PORT        = process.env.PORT || 8080;
-const ENV         = process.env.ENV || "development";
-const express     = require("express");
-const bodyParser  = require("body-parser");
-const sass        = require("node-sass-middleware");
-const app         = express();
+const PORT         = process.env.PORT || 8080;
+const ENV          = process.env.ENV || "development";
+const express      = require("express");
+const bodyParser   = require("body-parser");
+const sass         = require("node-sass-middleware");
+const app          = express();
 
-const knexConfig  = require("./knexfile");
-const knex        = require("knex")(knexConfig[ENV]);
-const morgan      = require('morgan');
-const knexLogger  = require('knex-logger');
+const knexConfig   = require("./knexfile");
+const knex         = require("knex")(knexConfig[ENV]);
+const morgan       = require('morgan');
+const knexLogger   = require('knex-logger');
+
+const cookieParser = require('cookie-parser');
+const flash        = require('connect-flash');
+const session      = require('express-session');
 
 // Seperated Routes for each Resource
 
@@ -39,16 +43,42 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
+app.use(cookieParser());
+app.use(session({
+  name: 'auth_cookie',
+  secret: '}AYtBAzqBT3o)?2<l_'
+}));
+app.use(flash());
+
+// Routes
+
 // Mount all resource routes
+
+
+const authCheck = (req, res, next) => {
+  if (req.session.user) {
+    next();
+  }
+  else {
+    res.redirect('/login');
+  }
+  //next();
+}
+
+// function isOwner() {
+//   // and check that their role is 'owner'
+//
+// }
+
 app.use("/", authRoutes(knex));
-//app.use("/users", usersRoutes(knex));
-app.use("/users/:id/restaurants", restaurantsRoutes(knex));
+app.use("/users/restaurants", authCheck, restaurantsRoutes(knex));
 app.use("/owners", ownerRoutes(knex));
 
 // Home page
-app.get("/", (req, res) => {
-  res.render("index");
-});
+// app.get("/", (req, res) => {
+//   res.render("index");
+// });
+
 
 // stores the phone call messages
 app.get("/phone-call-messages/", (req, res) => {

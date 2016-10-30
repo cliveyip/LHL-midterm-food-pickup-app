@@ -2,20 +2,33 @@
 <html lang="en">
   <% include partials/_head %>
   <body>
-    <% include partials/_header %>
-    <main class="container">
-      <h1>HOME</h1>
-      <form action="/login" method="POST">
-        <label for="email">Enter Your Email: </label>
-        <input id="email" type="email" name="email">
-        <label for="password">Enter Your Password: </label>
-        <input id="password" type="password" name="password">
-        <button type="submit">Sign In</button>
-      </form>
-      <form action="/register" method="GET">
-        <button type="submit">Register</button>
-      </form>
-    </main>
-    <% include partials/_footer %>
+    <nav class="navbar navbar-dark bg-inverse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/#">
+          <img src="/images/hangry-cat.png" width="60" height="60" class="d-inline-block align-top" alt="">
+          Hangry CAT
+        </a>
+      </div>
+    </nav>    <div class="container">
+      <div class="jumbotron">
+        <h1 class="display-3">Hungry?</h1>
+        <p class="lead">This is a simple application where you can order foods from restaurants. </p>
+        <hr class="my-2">
+        <% if (isLoggedIn) { %>
+          <p>You are already Logged In. Do you want to log out?</p>
+          <p class="lead">
+            <a href="/logout" class="btn btn-danger btn-lg"><span class="fa fa-logout"></span> Log Out</a>
+          </p>
+        <% } else { %>
+          <p>Please Sign in or Register to continue</p>
+          <p class="lead">
+            <a href="/login" class="btn btn-primary btn-lg"><span class="fa fa-user"></span> Sign In</a>
+            <a href="/register" class="btn btn-success btn-lg"><span class="fa fa-user"></span> Register</a>
+          </p>
+        <% } %>
+
+      </div>
+    </div>
+    <% include partials/_scripts %>
   </body>
 </html>
