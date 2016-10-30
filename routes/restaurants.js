@@ -5,13 +5,13 @@ const router  = express.Router();
 
 module.exports = (knex) => {
   router.get("/", (req, res) => {
-    //const name = req.session.user.name;
+    const name = req.session.user.name;
     knex
       .select("*")
       .from("restaurants")
       .then((results) => {
-        let templateVars = { data: results };
-        //let templateVars = { data: results, name: name };
+        //let templateVars = { data: results };
+        let templateVars = { data: results, name: name };
         res.render("restaurants", templateVars);
     });
 
@@ -88,7 +88,6 @@ module.exports = (knex) => {
     const foodPrice = req.body.food_price;
     const quantity = req.body.quantity;
 
-    console.log(`----------------------${quantity}`);
     knex
     .select('id')
     .from('dishes')
