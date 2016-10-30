@@ -198,14 +198,26 @@ router.post("/:id/orders", (req, res) => {
 
     console.log("Notify clicked");
 
-    console.log(req.body.minutes);
+   let minutes = req.body.minutes;
 
     knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
     .select('dishes.name','dishes.price','carts.quantity','user_id').
     then((results) => {
       let templateVars = {data:results};
-      console.log(results);
+
+      let notify = ` Your order will be ready in ${minutes} minutes`;
+      console.log(notify);
+   client.messages.create({
+        to: "+16478867803",
+        from: "+16477243888",
+        body: notify,
+    }, function(err, message) {
+        console.log(message.sid);
+    });
+
       res.render('owner.ejs', templateVars);
+
+
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
 
