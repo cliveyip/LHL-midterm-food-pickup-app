@@ -4,14 +4,14 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (knex) => {
-  // see all restaurants
-
   router.get("/", (req, res) => {
+    //const name = req.session.user.name;
     knex
       .select("*")
       .from("restaurants")
       .then((results) => {
         let templateVars = { data: results };
+        //let templateVars = { data: results, name: name };
         res.render("restaurants", templateVars);
     });
 
@@ -20,32 +20,59 @@ module.exports = (knex) => {
   // see menus for specified restaurant
   // render with templatVars(cart data)
   router.get("/:id/menu", (req, res) => {
-    let templateVars = {
-      dishes:"",
-      restaurants:"",
-      carts: ""
-    };
+    // let templateVars = {
+    //   dishes:"",
+    //   restaurants:"",
+    //   carts: ""
+    // };
+    //
+    // let td = templateVars;
+    //
+    //    knex.select("*")
+    //    .from("restaurants").then((restaurants) => {
+    //      return td.restaurants = restaurants;
+    //     }).then((rest_db) => {
+    //       knex.select('*').from('dishes')
+    //        .then((dishes_db)=>{
+    //           return td.dishes = dishes_db;
+    //         }).then((carts)=>{
+    //           knex.select('*').from('carts')
+    //           .then((carts_db)=>{
+    //             td.carts = carts_db;
+    //             //console.log(td);
+    //             res.render("menu", templateVars);
+    //           })
+    //         })
+    //   })
+    //   .catch((err)=>{
+    //       console.log(`Failed to get data ${err}`)});
 
-    let td = templateVars;
+    knex.select('*')
+    .from('dishes')
+    .orderBy('category', 'desc')
+    .then((results) => {
+      res.render('menu', { data: results });
+    })
+  });
 
-       knex.select("*")
-       .from("restaurants").then((restaurants) => {
-         return td.restaurants = restaurants;
-        }).then((rest_db) => {
-          knex.select('*').from('dishes')
-           .then((dishes_db)=>{
-              return td.dishes = dishes_db;
-            }).then((carts)=>{
-              knex.select('*').from('carts')
-              .then((carts_db)=>{
-                td.carts = carts_db;
-                //console.log(td);
-                res.render("menu", templateVars);
-              })
-            })
-      })
-      .catch((err)=>{
-          console.log(`Failed to get data ${err}`)});
+  // get cart information for specific users
+  router.get("/:id/cart", (req, res) => {
+    // const userId = req.session.user.id;
+    // knex
+    // .select('*')
+    // .from('carts')
+    // .where('user_id', userId)
+    // .then((results) => {
+    //   res.render('menu', { data: results });
+    // });
+    knex
+    .select('*')
+    .from('carts')
+    .innerJoin('dishes', 'carts.dish_id', 'dishes.id')
+    .orderBy('name', 'desc')
+    .then((results) => {
+      res.json(results);
+    })
   });
 
   // when +,- clicked, update database cart and response with updated cart data
@@ -60,6 +87,8 @@ module.exports = (knex) => {
     const foodName = req.body.food_name;
     const foodPrice = req.body.food_price;
     const quantity = req.body.quantity;
+
+    console.log(`----------------------${quantity}`);
     knex
     .select('id')
     .from('dishes')
@@ -88,6 +117,7 @@ module.exports = (knex) => {
         }
         else {
           if (quantity === 0) {
+            console.log('delete');
             knex('carts')
             .where('dish_id', dish_id)
             .del()
@@ -97,7 +127,7 @@ module.exports = (knex) => {
               .from('dishes')
               .innerJoin('carts', 'dishes.id', 'carts.dish_id')
               .then((result) => {
-                console.log(result);
+                //console.log(result);
                 res.json(result);
               });
             });
@@ -112,7 +142,7 @@ module.exports = (knex) => {
               .from('dishes')
               .innerJoin('carts', 'dishes.id', 'carts.dish_id')
               .then((result) => {
-                console.log(result);
+                //console.log(result);
                 res.json(result);
               });
             });

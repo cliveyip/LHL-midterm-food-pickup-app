@@ -75,9 +75,9 @@ app.use("/users/restaurants", authCheck, restaurantsRoutes(knex));
 app.use("/owners", ownerRoutes(knex));
 
 // Home page
-app.get("/", (req, res) => {
-  res.render("index");
-});
+// app.get("/", (req, res) => {
+//   res.render("index");
+// });
 
 
 app.listen(PORT, () => {

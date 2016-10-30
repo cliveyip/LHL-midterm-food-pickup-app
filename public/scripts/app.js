@@ -31,9 +31,37 @@ $(document).ready(function () {
       method: 'POST',
       data: jsonData,
       success: function (data) {
-        console.log(data);
+        console.log('updating cart success');
+        renderCart();
       }
     });
-
   });
+
+  function renderCart() {
+    $.ajax({
+      url: '/users/restaurants/:id/cart',
+      method: 'GET',
+      success: function (data) {
+        console.log(data);
+        //$('#cart').html('');
+        //$('#cart').append(data);
+        var $cartContent = $('#cart').find('.jumbotron ul');
+        $cartContent.html('');
+        for (item in data) {
+          //console.log(data[item]);
+          var $new = $('<li>').text(`${data[item].name}, ${data[item].quantity}`);
+          $cartContent.append($new);
+        }
+      }
+    });
+  }
+
+  $('tbody').on('click', '.restaurant', function (event) {
+    const restaurantId = $(this).find('th').text();
+    window.location.href = `/users/restaurants/${restaurantId}/menu`;
+  })
+
+  if (window.location.href.endsWith('menu')) {
+    renderCart();
+  }
 });

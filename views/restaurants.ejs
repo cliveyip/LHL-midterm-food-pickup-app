@@ -2,21 +2,45 @@
 <html lang="en">
   <% include partials/_head %>
   <body>
-    <% include partials/_header %>
-    <div class="container">
-      <div class="jumbotron text-center">
-        <h1>Restaurants</h1>
-        <% for (restaurant in data) { %>
-          <a href="<%= data[restaurant].id %>/menu">
-          <%= data[restaurant].id %>
-          <%= data[restaurant].name %>
-          <%= data[restaurant].address %>
-          <%= data[restaurant].phone_numb %>
-          </a>
-        <% } %>
-        <a href="/logout" class="btn btn-danger"><span class="fa fa-sign-out"></span> Log Out</a>
+    <nav class="navbar navbar-dark bg-inverse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/#">
+          <img src="/images/hangry-cat.png" width="60" height="60" class="d-inline-block align-top" alt="">
+          Hangry CAT
+        </a>
       </div>
+      <a href="/logout" class="btn btn-danger float-lg-right"><span class="fa fa-sign-out"></span> Log Out</a>
+    </nav>
+    <div class="container">
+      <div class="col-md-8">
+        <h1 class="display-3">Welcome, Nobody</h1>
+        <!-- change Nobody to name from templateVars -->
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th><span class="fa fa-info-circle"></span> NAME</th>
+                <th><span class="fa fa-map-marker"></span> ADDRESS</th>
+                <th><span class="fa fa-phone"></span> PHONE NUMBER</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (restaurant in data) { %>
+                <tr class="restaurant">
+                  <th scope="row"><%=data[restaurant].id%></th>
+                  <td><%=data[restaurant].name%></td>
+                  <td><%=data[restaurant].address%></td>
+                  <td><%=data[restaurant].phone_numb%></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+
     </div>
-    <% include partials/_footer %>
+    <% include partials/_scripts %>
   </body>
 </html>

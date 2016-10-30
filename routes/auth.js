@@ -5,8 +5,23 @@ const bcrypt = require('bcrypt-nodejs');
 const router = express.Router();
 
 module.exports = (knex) => {
+
+  router.get("/", (req, res) => {
+    if (req.session.user){
+      res.render("index", { isLoggedIn: true });
+    }
+    else {
+      res.render("index", { isLoggedIn: false });
+    }
+  });
+
   router.get("/login", (req, res) => {
-    res.render("login", { message: req.flash('loginMsg')});
+    if (req.session.user){
+      res.redirect("/");
+    }
+    else {
+      res.render("login", { message: req.flash('loginMsg')});
+    }
   });
 
   router.post("/login", (req, res) => {
@@ -36,9 +51,12 @@ module.exports = (knex) => {
   router.get("/register", (req, res) => {
     res.render("register", { message: req.flash('registerMsg')});
   });
-  
+
   // send register form
   router.post("/register", (req, res) => {
+    if (req.session.user){
+      res.redirect("/");
+    }
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
