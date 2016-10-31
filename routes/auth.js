@@ -30,7 +30,7 @@ module.exports = (knex) => {
 
     if (!email || !password) {
       req.flash('loginMsg', 'You need to fill in the blanks');
-      res.redirect('login');
+      return res.redirect('login');
     }
     knex.select('*')
     .from('users')
@@ -46,12 +46,14 @@ module.exports = (knex) => {
       }
       else{
         req.session.user = result[0];
-        return res.redirect('/users/restaurants/');
+        if (req.session.user.is_owner) {
+          return res.redirect('/owners/orders');
+        }
+        else return res.redirect('/users/restaurants/');
       }
     })
   });
 
-  // see register page
   router.get("/register", (req, res) => {
     if (req.session.user){
       res.redirect("/");
@@ -59,7 +61,6 @@ module.exports = (knex) => {
     res.render("register", { message: req.flash('registerMsg')});
   });
 
-  // send register form
   router.post("/register", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -99,8 +100,6 @@ module.exports = (knex) => {
     }
   });
 
-
-  // logout
   router.get("/logout", (req, res) => {
     req.session.destroy((err) => {
       console.log('cannot destroy session');

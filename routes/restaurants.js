@@ -9,7 +9,6 @@ var authToken = '5b33845fd992c0d3c8e5eba8ed5c0c53';
 //require the Twilio module and create a REST client
 var client = require('twilio')(accountSid, authToken);
 
-
 module.exports = (knex) => {
   router.get("/", (req, res) => {
     const name = req.session.user.name;
@@ -19,110 +18,45 @@ module.exports = (knex) => {
       .then((results) => {
         res.render("restaurants", { data: results, name: name });
     });
-
   });
 
   router.get("/:id/menu", (req, res) => {
-    // let templateVars = {
-    //   dishes:"",
-    //   restaurants:"",
-    //   carts: ""
-    // };
-    //
-    // let td = templateVars;
-    //
-    //    knex.select("*")
-    //    .from("restaurants").then((restaurants) => {
-    //      return td.restaurants = restaurants;
-    //     }).then((rest_db) => {
-    //       knex.select('*').from('dishes')
-    //        .then((dishes_db)=>{
-    //           return td.dishes = dishes_db;
-    //         }).then((carts)=>{
-    //           knex.select('*').from('carts')
-    //           .then((carts_db)=>{
-    //             td.carts = carts_db;
-    //             //console.log(td);
-    //             res.render("menu", templateVars);
-    //           })
-    //         })
-    //   })
-    //   .catch((err)=>{
-    //       console.log(`Failed to get data ${err}`)});
-
     knex.select('*')
     .from('dishes')
-    .orderBy('category', 'desc')
-    .then((results) => {
-      res.render('menu', { data: results, id: req.params.id });
-    })
+    .then((dishesData) => {
+      const dishes = dishesData;
+      knex.select('*')
+      .from('dishes')
+      .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+      .where('user_id', req.session.user.id)
+      .then((results) => {
+        let quantities = [];
+        for (let i = 0; i < dishes.length; i++) {
+          let quantity = 0;
+          for (let j = 0; j < results.length; j++) {
+            if(dishes[i].id === results[j].dish_id) {
+              quantity = results[j].quantity;
+            }
+          }
+          quantities.push(quantity);
+        }
+        res.render('menu', { dishes: dishes, quantities: quantities, id: req.params.id });
+      });
+    });
   });
 
-
-  // get cart information for specific users
   router.get("/:id/cart", (req, res) => {
-    // const userId = req.session.user.id;
-    // knex
-    // .select('*')
-    // .from('carts')
-    // .where('user_id', userId)
-    // .then((results) => {
-    //   res.render('menu', { data: results });
-    // });
     knex
     .select('*')
     .from('carts')
     .innerJoin('dishes', 'carts.dish_id', 'dishes.id')
-    .orderBy('name', 'desc')
+    .where('user_id', req.session.user.id)
     .then((results) => {
       res.json(results);
     })
   });
 
-    // console.log("in menu");
-    // knex.select("*").from("dishes").then(
-    //   (results)=>{
-    //     res.render('menu',{data:results});
-    //   })
-/*
-    let templateVars = {
-      dishes:"",
-      restaurants:"",
-      carts: ""
-    };
-
-    let td = templateVars;
-
-       knex.select("*")
-       .from("restaurants").then((restaurants) => {
-         return td.restaurants = restaurants;
-        }).then((rest_db) => {
-          knex.select('*').from('dishes')
-           .then((dishes_db)=>{
-              return td.dishes = dishes_db;
-            }).then((carts)=>{
-              knex.select('*').from('carts')
-              .then((carts_db)=>{
-                td.carts = carts_db;
-                console.log(td);
-                res.render("menu", templateVars);
-              })
-            })
-      })
-      .catch((err)=>{
-          console.log(`Failed to get data ${err}`)});
-
-  });*/
-
-  // when +,- clicked, update database cart and response with updated cart data
-  // use append to add and remove from cart view (in app.js)
-  // for restful design, I changed it to cart/update
-  // if we going to keep history of all carts, then "/:id/carts/:id/update"
   router.post("/:id/cart/update", (req, res) => {
-    // something like this
-    // db.carts.update(req.body.menuItemId, newCartData =>
-    //   res.json(newCartData)
-    // )
     const foodName = req.body.food_name;
     const foodPrice = req.body.food_price;
     const quantity = req.body.quantity;
@@ -136,10 +70,31 @@ module.exports = (knex) => {
       knex
       .select('*')
       .from('carts')
-      .where('dish_id', dish_id)
+      .where({
+        dish_id: dish_id,
+        user_id: req.session.user.id
+      })
       .then((results) => {
-        if (results.length == 0) {
+        if (quantity === '0') {
+          knex('carts')
+          .where({
+            dish_id: dish_id,
+            user_id: req.session.user.id
+          })
+          .del()
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              res.json(result);
+            });
+          });
+        }
+        else if (results.length == 0) {
           knex('carts').insert({
+            user_id: req.session.user.id,
             dish_id: dish_id,
             quantity: "1"
           })
@@ -154,61 +109,55 @@ module.exports = (knex) => {
           });
         }
         else {
-          if (quantity === 0) {
-            console.log('delete');
-            knex('carts')
-            .where('dish_id', dish_id)
-            .del()
-            .then(() => {
-              knex
-              .select('*')
-              .from('dishes')
-              .innerJoin('carts', 'dishes.id', 'carts.dish_id')
-              .then((result) => {
-                //console.log(result);
-                res.json(result);
-              });
+          knex('carts')
+          .where({
+            dish_id: dish_id,
+            user_id: req.session.user.id
+          })
+          .update({quantity: quantity})
+          .then(() => {
+            knex
+            .select('*')
+            .from('dishes')
+            .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+            .then((result) => {
+              res.json(result);
             });
-          }
-          else {
-            knex('carts')
-            .where('dish_id', dish_id)
-            .update({quantity: quantity})
-            .then(() => {
-              knex
-              .select('*')
-              .from('dishes')
-              .innerJoin('carts', 'dishes.id', 'carts.dish_id')
-              .then((result) => {
-                //console.log(result);
-                res.json(result);
-              });
-            });
-          }
+          });
         }
-      })
+      });
     });
   });
 
-  // see checkout page with updated cart
-  // render checkout with templatVars(cart data)
   router.get("/:id/checkout", (req, res) => {
-    const id = req.params.id;
 
-    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
-    .select('dishes.name','dishes.price','carts.quantity').
-    then((results) => {
-      console.log(results);
-      res.render('checkout', { data: results, id: id});
-    }).catch((e)=>{
-      console.log(`failed to get data ${e}`)});
-
-
+    knex.select('*')
+    .from('dishes')
+    .innerJoin('carts', 'dishes.id', 'carts.dish_id')
+    .where('user_id', req.session.user.id)
+    .then((results) => {
+      res.render('checkout', { data: results, id: req.params.id});
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   });
 
-  // update payment method in database cart
-  // communicate with the restaurant using twilio api (send updated cart as an order)
-  // render with templateVars (w/e info we got from api)
+  // ------------------------------------------------------//
+  //
+  // knex('carts')
+  // .where('user_id', req.session.user.id)
+  // .del()
+  // .then(() => {
+  //    console.log('deletion success');
+  // })
+  // .catch((error) => {
+  //    console.log(error);
+  // });
+  //
+  // -> this needs to be included somewhere after we send the
+  //    order to the ownerRoutes
+
   router.post("/:id/checkout", (req, res) => {
 
     let db = {};
@@ -232,17 +181,11 @@ module.exports = (knex) => {
         console.log(message.sid);
     }); */
 
-    res.redirect("/users/:id/restaurants/:id/confirmation");
+    res.redirect(`/users/restaurants/${req.params.id}/confirmation`);
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
   });
 
-
-
-
-
-  // see confirmation page
-  // maybe not needed, need to see twilio api
   router.get("/:id/confirmation", (req, res) => {
     console.log("in confirmation get request");
         let db = {};
@@ -272,57 +215,6 @@ module.exports = (knex) => {
       console.log(`failed to get data ${e}`)});
 
   });
-
-
-
-  router.get("/:id/orders", (req, res) => {
-    console.log("Inside orders");
-    let templateVars = {};
-
-    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
-    .select('dishes.name','dishes.price','carts.quantity','user_id').
-    then((results) => {
-      let templateVars = {data:results};
-      console.log(results);
-      res.render('owner.ejs', templateVars);
-    }).catch((e)=>{
-      console.log(`failed to get data ${e}`)});
-  });
-
-
-
-router.post("/:id/orders", (req, res) => {
-      let templateVars = {};
-
-    console.log("Notify clicked");
-
-
-   const minutes = `Thank You ! \n Your order will be ready in ${req.body.minutes} minutes`;
-
-    knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
-    .select('dishes.name','dishes.price','carts.quantity','user_id').
-    then((results) => {
-      let templateVars = {data:results};
-
-      console.log("Send time to Client");
-         client.messages.create({
-        to: "+16478867803",
-        from: "+16477243888",
-        body: minutes,
-    }, function(err, message) {
-      console.log(err);
-    });
-
-
-      res.render('owner.ejs', templateVars);
-    }).catch((e)=>{
-      console.log(`failed to get data ${e}`)});
-
-
-  });
-
-
-
-
+  
   return router;
 }

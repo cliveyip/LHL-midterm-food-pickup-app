@@ -50,11 +50,8 @@ app.use(session({
 }));
 app.use(flash());
 
-// Routes
 
-// Mount all resource routes
-
-
+// Auth middleware
 const authCheck = (req, res, next) => {
   if (req.session.user) {
     next();
@@ -62,23 +59,12 @@ const authCheck = (req, res, next) => {
   else {
     res.redirect('/login');
   }
-  //next();
 }
 
-// function isOwner() {
-//   // and check that their role is 'owner'
-//
-// }
-
+// Mount all resource routes
 app.use("/", authRoutes(knex));
 app.use("/users/restaurants", authCheck, restaurantsRoutes(knex));
 app.use("/owners", ownerRoutes(knex));
-
-// Home page
-// app.get("/", (req, res) => {
-//   res.render("index");
-// });
-
 
 // stores the phone call messages
 app.get("/phone-call-messages/", (req, res) => {

@@ -4,16 +4,16 @@
   <body>
     <% include partials/_header %>
     <div class="container">
-      <h1>Confirmation</h1>
-    </div>
-      <div>
-        Thank You For Your Order ! <br>
-         - You will be notified via SMS how long your food will take.
+      <div class="jumbotron">
+        <h1 class="display-3">Thank You For Your Order ! <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></h1>
+
+        <p class="lead">You will be notified via SMS how long your food will take.</p>
+        <hr class="my-2">
+        <a href = "/users/restaurants/1/menu">
+          <button type="button" class="btn btn-success"> Back to Menu </button>
+        </a>
       </div>
-        <a href = "/users/2/restaurants/1/menu"><button type="button" class="btn btn-default"> Back to Menu </button></a>
-
-
-    </main>
+    </div>
     <% include partials/_scripts %>
   </body>
 </html>
