@@ -193,14 +193,13 @@ module.exports = (knex) => {
   // see checkout page with updated cart
   // render checkout with templatVars(cart data)
   router.get("/:id/checkout", (req, res) => {
-    let templateVars = {};
+    const id = req.params.id;
 
     knex('dishes').join('carts','dishes.id', '=', 'carts.dish_id')
     .select('dishes.name','dishes.price','carts.quantity').
     then((results) => {
-      let templateVars = {data:results};
       console.log(results);
-      res.render('checkout', templateVars);
+      res.render('checkout', { data: results, id: id});
     }).catch((e)=>{
       console.log(`failed to get data ${e}`)});
 

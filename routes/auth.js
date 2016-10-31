@@ -28,6 +28,10 @@ module.exports = (knex) => {
     const email = req.body.email;
     const password = req.body.password;
 
+    if (!email || !password) {
+      req.flash('loginMsg', 'You need to fill in the blanks');
+      res.redirect('login');
+    }
     knex.select('*')
     .from('users')
     .where('email', email)
