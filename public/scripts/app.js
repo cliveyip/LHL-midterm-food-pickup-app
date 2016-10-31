@@ -1,14 +1,3 @@
-// $(() => { // on page load
-//   // $.ajax({
-//   //   method: "GET",
-//   //   url: "/users"
-//   // }).done((users) => {
-//   //   for(user of users) {
-//   //     $("<div>").text(user.name).appendTo($("body"));
-//   //   }
-//   // });
-// });
-
 $(document).ready(function () {
   $('.input-group').on('click', 'button', function (event) {
     var $quantity = $(this).closest('.input-group').find('.input-number');
@@ -50,13 +39,13 @@ $(document).ready(function () {
       url: '/users/restaurants/:id/cart',
       method: 'GET',
       success: function (data) {
-        //$('#cart').html('');
-        //$('#cart').append(data);
         var $cartContent = $('#cart').find('.jumbotron ul');
         $cartContent.html('');
+        var total = 0;
         for (item in data) {
-          //console.log(data[item]);
-          var $new = $('<li>').text(`${data[item].name}, ${data[item].quantity}`);
+          var curTotal = Math.round(data[item].price * data[item].quantity * 100) / 100;
+          total += curTotal;
+          var $new = $('<li>').text(`${data[item].name} X ${data[item].quantity} = ${curTotal}` );
           $cartContent.append($new);
         }
         if (!$cartContent.html()) {
@@ -65,6 +54,7 @@ $(document).ready(function () {
         else {
           $('#cart').find('#checkout-button').prop('disabled', false);
         }
+        $('#cart').find('.lead').html(`Total : <i class="fa fa-usd" aria-hidden="true"></i> ${Math.round(total * 100) / 100}`);
       }
     });
   }
